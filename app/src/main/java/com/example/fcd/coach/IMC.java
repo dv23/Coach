@@ -48,7 +48,49 @@ public class IMC extends ActionBarActivity {
         return IMG;
 
     }
+    public void resultatIMG(float img)
+    {
+        //resIMG();
+        //int cj =0;
+        //float cm =0;
+        int re =0;
+        //cj=sexe;
+        //cm=img;
+        switch (sexe) {
+            case 0:
+                if (img < minFemme) re= 0;
+                if ((img > minFemme )&& (img < maxFemme)) re= 1;
+                if (img > maxFemme) re= 2;
+            case 1:
+                if (img < minHomme) re= 0;
+                if ((img > minHomme )&& (img < maxHomme)) re= 1;
+                if (img > maxHomme) re= 2;
+                break;
+        }
+        afficheresultatIMG(re, img);
+    }
 
+    public void afficheresultatIMG(int r, float img)
+    {
+        TextView lblIMG = (TextView) findViewById(R.id.lblIMG);
+        ImageView imgSmiley = (ImageView) findViewById(R.id.imgSmiley);
+        if (r==0) {
+            lblIMG.setTextColor(Color.RED);
+            lblIMG.setText(String.format("%.01f", img) + "% : IMG trop faible");
+            imgSmiley.setImageResource(R.drawable.maigre);
+        }
+        if (r==1) {
+            lblIMG.setTextColor(Color.GREEN);
+            lblIMG.setText(String.format("%.01f", img) + "% : IMG normal");
+            imgSmiley.setImageResource(R.drawable.normal);
+        }
+
+        if (r==2) {
+            lblIMG.setTextColor(Color.RED);
+            lblIMG.setText(String.format("%.01f", img) + "% : IMG trop ELEVE");
+            //imgSmiley.setImageResource(R.drawable.graisse);
+        }
+    }
     private void ecouteCalcul() {
         ((Button)findViewById(R.id.btnCalc)).setOnClickListener(new Button.OnClickListener() {
             private float aFloat;
@@ -57,23 +99,18 @@ public class IMC extends ActionBarActivity {
                 String txtPoids = ((EditText)findViewById(R.id.txtPoids)).getText().toString();
                 String txtTaille = ((EditText)findViewById(R.id.txtTaille)).getText().toString();
                 String txtAge = ((EditText)findViewById(R.id.txtAge)).getText().toString();
-                TextView lblIMG = (TextView) findViewById(R.id.lblIMG);
-                ImageView imgSmiley = (ImageView) findViewById(R.id.imgSmiley);
-                imgSmiley.setImageResource(R.drawable.normal);
+                //TextView lblIMG = (TextView) findViewById(R.id.lblIMG);
+               //imgSmiley.setImageResource(R.drawable.normal);
                 float img;
                 if ((!(txtPoids.equals(""))) && (!(txtTaille.equals(""))) && (!(txtAge.equals("")))) {
-// calcul
-                    //String txtTaille = ((EditText) findViewById(R.id.txtTaille)).toString();
+                // calcul
 
                     calcIMG(txtPoids,txtTaille,txtAge);
                     img = calcIMG(txtPoids,txtTaille,txtAge);
-                    //if ((sexe=0) && (img<minFemme)) {
-                        lblIMG.setTextColor(Color.RED);
-                        //lblIMG.setText(+String.format("%.01f", img)+"X.X% : IMG trop faible")
-                        //String.format("%.01f", img);
+                    resultatIMG(img);
                         //imgSmiley.setImageResource(R.drawable.normal);
-                    //}
-                }else{
+                                                                                                    }
+                else{
                     Toast.makeText(IMC.this, "Veuillez saisir tous les champs !", Toast.LENGTH_SHORT).show();
                 }
             }
